@@ -1,10 +1,10 @@
-# Aula 08 e Aula 09 - Banco de Dados SQLite (CRUD)
+# Aula 08, Aula 09 e Aula 10 - Banco de Dados SQLite (CRUD)
 
-## Aula 08 (22-09-2021) e Aula 09 (29-09-2021)
+## Aula 08 (22-09-2021),  Aula 09 (29-09-2021) e Aula 10 (06-10-2021)
 
 ![Badge](https://img.shields.io/badge/Marcos%20Dias%20Vendramini-Android-green)
 
-### Aula 08 ministrada no dia 22/09/2021 e Aula 09 ministrada no dia 29/09/2021 para o quarto período na UniAlfa de Umuarama (2º Bimestre).
+### Aula 08 ministrada no dia 22/09/2021, Aula 09 ministrada no dia 29/09/2021 e Aula 10 ministrada no dia 06/10/2021 para o quarto período do Curso de Sistemas para Internet da UniAlfa de Umuarama (2º Bimestre).
 
 ### Conteúdo
 
