@@ -13,7 +13,8 @@
 - [x] Classe para controle do banco de dados
 - [x] Classe para controle das operações da tabela de Aluno (INSERT, UPDATE, DELETE e SEARCH)
 - [x] Tela inicial com a listagem de todos os alunos cadastrados
-- [ ] Tela para o cadastro do Aluno
+- [x] Tela para o cadastro do Aluno
+- [x] Adicionar uma nova coluna em uma tabela já existente
 
 ### Tecnologias
 
