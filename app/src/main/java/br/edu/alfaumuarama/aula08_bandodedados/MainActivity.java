@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import br.edu.alfaumuarama.aula08_bandodedados.db.Aluno;
 import br.edu.alfaumuarama.aula08_bandodedados.db.TbAluno;
 
@@ -23,15 +26,17 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         btnAdicionar = findViewById(R.id.btnAdicionar);
-
         btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,
-                                                    CadAlunoActivity.class));
+                startActivity(new Intent(MainActivity.this, CadAlunoActivity.class));
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         buscarDados();
     }
 
@@ -63,5 +68,28 @@ public class MainActivity extends ListActivity {
             listaRetorno.add(listaAlunos.get(i).toHashMap());
 
         return listaRetorno;
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        //pegar o aluno selecionado na listview pelo indice (position)
+        Aluno aluno = listaAlunos.get(position);
+
+        //criando o caminho da tela Main para a tela de cadastro
+        Intent telaCadastro = new Intent(this, CadAlunoActivity.class);
+
+        //criando os parametros com os dados do aluno
+        Bundle params = new Bundle();
+        params.putString("nome", aluno.nome);
+        params.putInt("ra", aluno.RA);
+        params.putString("cidade", aluno.cidade);
+
+        //adicionar os parametos no caminho da tela
+        telaCadastro.putExtras(params);
+
+        //abrindo a tela de cadastro com os parametros
+        startActivity(telaCadastro);
     }
 }

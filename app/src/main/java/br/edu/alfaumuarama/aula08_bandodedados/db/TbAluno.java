@@ -10,10 +10,12 @@ public class TbAluno {
     public TbAluno(Context context) {
         //sql responsavel pela criacao da tabela, caso a mesma ainda nao exista
         String sSQL = "CREATE TABLE IF NOT EXISTS TbAluno (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "nome TEXT, ra INTEGER, cidade TEXT)";
+            " id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            " nome TEXT, ra INTEGER, cidade TEXT, uf TEXT)";
 
         BancoDeDados.getInstance().executarSQL(context, sSQL);
+
+        BancoDeDados.getInstance().adicionarNovaColuna(context, "TbAluno", "uf", "TEXT");
     }
 
     private String addAspas(String texto) {
@@ -22,11 +24,12 @@ public class TbAluno {
 
     private void inserir(Context context, Aluno aluno) {
         String sSQL =
-                "INSERT INTO TbAluno (nome, ra, cidade) VALUES " +
+                "INSERT INTO TbAluno (nome, ra, cidade, uf) VALUES " +
                 "(" +
                     addAspas(aluno.nome) + ", " +
                     aluno.RA + ", " +
-                    addAspas(aluno.cidade) +
+                    addAspas(aluno.cidade) + ", " +
+                    addAspas(aluno.uf) +
                 ")";
 
         BancoDeDados.getInstance().executarSQL(context, sSQL);
@@ -37,7 +40,8 @@ public class TbAluno {
                 "UPDATE TbAluno SET " +
                 "  nome = " + addAspas(aluno.nome) + ", " +
                 "  ra = " + aluno.RA + ", " +
-                "  cidade = " + addAspas(aluno.cidade) + " " +
+                "  cidade = " + addAspas(aluno.cidade) + ", " +
+                "  uf = " + addAspas(aluno.uf) + " " +
                 "WHERE ra = " + aluno.RA;
 
         BancoDeDados.getInstance().executarSQL(context, sSQL);
@@ -54,9 +58,8 @@ public class TbAluno {
             inserir(context, aluno); //senao encontrou, faz o INSERT do aluno
     }
 
-    public void excluir(Context context, Aluno aluno) {
-        String sSQL = "DELETE FROM TbAluno WHERE ra = " + aluno.RA;
-
+    public void excluir(Context context, String ra) {
+        String sSQL = "DELETE FROM TbAluno WHERE ra = " + ra;
         BancoDeDados.getInstance().executarSQL(context, sSQL);
     }
 
@@ -65,7 +68,6 @@ public class TbAluno {
         Cursor cursor = BancoDeDados.getInstance().getMeuBanco()
                 .rawQuery("SELECT * FROM TbAluno WHERE ra = " + ra, null);
         */
-
         String condicaoSQL = "";
 
         if (ra > 0) {
@@ -77,7 +79,7 @@ public class TbAluno {
 
         Cursor cursor = BancoDeDados.getInstance().getMeuBanco().query(
             "TbAluno", //nome da tabela
-            new String[] { "nome", "ra", "cidade" }, //colunas retornadas pela busca
+            new String[] { "nome", "ra", "cidade", "uf" }, //colunas retornadas pela busca
             condicaoSQL, //condicao do WHERE
             null, //parametros da condicao do WHERE
             null, //os campos do Group By
@@ -101,6 +103,7 @@ public class TbAluno {
             int campoNome = cursor.getColumnIndex("nome");
             int campoRA = cursor.getColumnIndex("ra");
             int campoCidade = cursor.getColumnIndex("cidade");
+            int campoUF = cursor.getColumnIndex("uf");
 
             for (int i = 0; i < cursor.getCount(); i++) {
                 //populando a classe aluno com os dados do aluno do banco de dados
@@ -108,6 +111,7 @@ public class TbAluno {
                 aluno.nome = cursor.getString(campoNome);
                 aluno.RA = cursor.getInt(campoRA);
                 aluno.cidade = cursor.getString(campoCidade);
+                aluno.uf = cursor.getString(campoUF);
 
                 //adicionando o aluno na lista de retorno
                 listaRetorno.add(aluno);

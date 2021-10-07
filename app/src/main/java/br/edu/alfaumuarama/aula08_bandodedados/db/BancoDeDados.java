@@ -1,13 +1,13 @@
 package br.edu.alfaumuarama.aula08_bandodedados.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class BancoDeDados {
     private SQLiteDatabase meuBanco;
 
-    //criando um Singleton, para garantir que esta classe seja instanciada
-    //  somente uma vez
+    //criando um Singleton, para garantir que esta classe seja instanciada somente uma vez
     private static final BancoDeDados bancoDeDados = new BancoDeDados();
 
     public static BancoDeDados getInstance() {
@@ -20,8 +20,7 @@ public class BancoDeDados {
 
     private void criarBanco(Context context) {
         //cria o banco de dados, caso nao exista, e abre a conexao
-        meuBanco = context.openOrCreateDatabase("meuBanco.db",
-                Context.MODE_PRIVATE, null);
+        meuBanco = context.openOrCreateDatabase("meuBanco.db", Context.MODE_PRIVATE, null);
     }
 
     public void abrirBanco(Context context) {
@@ -61,6 +60,33 @@ public class BancoDeDados {
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void adicionarNovaColuna(Context context, String tabela, String coluna, String tipoDados) {
+        //verifica se a coluna ja existe
+        if (existeColunaNaTabela(context, tabela, coluna) == false) {
+            //se a coluna nao existir, adiciona a nova coluna na tabela
+            executarSQL(context, "ALTER TABLE " + tabela + " ADD COLUMN " + coluna + " " + tipoDados);
+        }
+    }
+
+    private boolean existeColunaNaTabela(Context context, String tabela, String coluna) {
+        try {
+            //abrindo a conexao com o banco antes de executar o comando SQL
+            abrirBanco(context);
+
+            Cursor cursor = meuBanco.rawQuery("SELECT * FROM " + tabela + " LIMIT 0", null);
+
+            int indiceColuina = cursor.getColumnIndex(coluna);
+
+            //fechando a conexao com o banco depois de executar o comando SQL
+            fecharBanco();
+
+            return (indiceColuina != -1);
+        }
+        catch (Exception ex) {
+            return false;
         }
     }
 }
